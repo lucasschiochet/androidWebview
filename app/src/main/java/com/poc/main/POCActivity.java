@@ -1,13 +1,21 @@
 package com.poc.main;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -16,6 +24,7 @@ import android.view.WindowManager;
 import android.webkit.CookieManager;
 import android.webkit.JavascriptInterface;
 import android.webkit.JsResult;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -23,8 +32,11 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.core.app.ActivityCompat;
+
 import com.poc.main.database.*;
 
+import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 
 public class POCActivity extends Activity {
@@ -36,7 +48,9 @@ public class POCActivity extends Activity {
     private WindowManager wm;
     private View overlayView;
     private boolean createOverlay;
-
+    static final int REQUEST_IMAGE_CAPTURE = 1;
+    static final int RESULT_LOAD_IMAGE = 2;
+    private String imageBase64;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -241,6 +255,73 @@ public class POCActivity extends Activity {
                 }
             });
         }
+
+        @JavascriptInterface
+        public String getImageBase64(){
+            return imageBase64;
+        }
+
+        @JavascriptInterface
+        public void openCamera(){
+            System.out.println("openCamera");
+            if (ActivityCompat.checkSelfPermission(POCActivity.this, Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED ) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        runJs("setBrigde('close');");
+                    }
+                });
+                ActivityCompat.requestPermissions(POCActivity.this, new String[]{Manifest.permission.CAMERA,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            }else{
+                dispatchTakePictureIntent();
+            }
+        }
+        @JavascriptInterface
+        public void openGallery(){
+            getImageFromAlbum();
+        }
+
+    }
+
+    private void getImageFromAlbum(){
+        try{
+            Intent i = new Intent(Intent.ACTION_PICK,
+                    android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            startActivityForResult(i, RESULT_LOAD_IMAGE);
+        }catch(Exception exp){
+            Log.i("Error",exp.toString());
+        }
+    }
+
+    private void dispatchTakePictureIntent() {
+        System.out.println("dispatchTakePictureIntent");
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            System.out.println("resolveActivity done");
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    public void runJs(String script){
+        System.out.println("#runJS");
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)
+            webview.evaluateJavascript(script,
+                    new ValueCallback<String>() {
+                        @Override
+                        public void onReceiveValue(String result) {
+                        }
+                    });
+        else
+            webview.loadUrl("javascript:"+script);
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                webview.invalidate();
+            }
+        });
     }
 
     public void createOverlay(){
@@ -263,6 +344,19 @@ public class POCActivity extends Activity {
             ers.printStackTrace();
         }catch(Error errr){
             errr.printStackTrace();
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+            imageBitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
+            byte[] byteArray = byteArrayOutputStream.toByteArray();
+            String encoded = Base64.encodeToString(byteArray, Base64.DEFAULT);
+            imageBase64 = encoded;
+            runJs("setBrigde('available');");
         }
     }
 }
