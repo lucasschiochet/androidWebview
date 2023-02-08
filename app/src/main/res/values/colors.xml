@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="statusPending">#437BD1</color>
+    <color name="statusOn">#369E6A</color>
+    <color name="statusOff">#DE4431</color>
+    <color name="statusWarning">#DBC32A</color>
+
+    <color name="buttonPrimary">#437BD1</color>
+    <color name="menuPrimaryColor">#777777</color>
+    <color name="menuSecundaryColor">#437BD1</color>
+    <color name="menuSecundaryBackground">#E9F0FA</color>
+
+    <color name="red">#ff0000</color>
+    <color name="green">#00ff00</color>
+    <color name="blue">#0000ff</color>
+    <color name="preto">#000000</color>
+    <color name="branco">#FFFFFF</color>
+    <color name="verdeMetro">#21B6A8</color>
+    <color name="amareloMetro">#FFCC00</color>
+    <color name="vermerlhoMetro">#FF0000</color>
+    <color name="vermelhoClaroMetro">#B6212D</color>
+    <color name="azulZebradoClaro">#91C3DC</color>
+    <color name="azulZebradoEscuro">#4086AA</color>
+    <color name="azulMetro">#1FBED6</color>
+    <color name="metroAzul">#2E88E8</color>
+    <color name="metroRoxo">#e1e6f6</color>
+    <color name="metroLaranja">#d14b2e</color>
+    <color name="metroVerde">#019313</color>
+    <color name="metroAmarelo">#ffa00e</color>
+    <color name="metroRosa">#bf1d4c</color>
+    <color name="metroVerdeAzulado">#00757c</color>
+    <color name="azulLogo">#004795</color>
+    <color name="grayMenuButton">#E4E5E7</color>
+    <color name="lightGrayColor">#E8E6E1</color>
+    <color name="menuBackground">#2c323f</color>
+    <color name="menuForeground">#393F4C</color>
+
+    <color name="bottombar">#f7f7f7</color>
+    <color name="bottombarselected">#a3c94a</color>
+    <color name="card_background">#E5E5E5</color>
+    <color name="card_bottom_one">#DADADA</color>
+    <color name="card_bottom_two">#D4D4D4</color>
+    <color name="card_label">#838383</color>
+    <dimen name="com_facebook_picker_place_image_size">64dp</dimen>
+    <color name="com_facebook_picker_search_bar_background">#f5f5f7</color>
+    <color name="com_facebook_picker_search_bar_text">#bcbdc2</color>
+
+    <color name="selection_background_color_dark">#FEBB20</color>
+    <color name="selection_background_color_light">#FEBB20</color>
+
+    <color name="gray">#C7C7CB</color>
+    <color name="gray_dark">#ffb7c4ad</color>
+    <color name="list_color_one">#CE213A</color>
+    <color name="list_color_two">#EA7838</color>
+    <color name="list_color_three">#AAAF3A</color>
+    <color name="list_color_four">#4176A1</color>
+    <color name="list_color_five">#E1342B</color>
+    <color name="list_color_six">#835089</color>
+    <color name="wbus_color">#F6C501</color>
+    <color name="wbus_dark_color">#F6A401</color>
+    <color name="wbus_blue_color">#004795</color>
+</resources>
